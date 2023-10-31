@@ -55,7 +55,7 @@ namespace RT2237A3.Controllers
                 
                 cfg.CreateMap<TrackBaseViewModel, TrackCheckBoxListViewModel>();
 
-
+                cfg.CreateMap<PlaylistBaseViewModel, PlaylistEditTracksViewModel>();
 
             })
             {
@@ -141,7 +141,10 @@ namespace RT2237A3.Controllers
 
         public PlaylistBaseViewModel PlaylistGetById(int id)
         {
-            var playlist = ds.Playlists.Include("Tracks").SingleOrDefault(p => p.PlaylistId == id);
+            var playlist = ds.Playlists
+                .Include(a => a.Tracks)
+          
+                .SingleOrDefault(p => p.PlaylistId == id);
 
             return playlist == null ? null : mapper.Map<Playlist, PlaylistBaseViewModel>(playlist);
         }

@@ -37,8 +37,8 @@ namespace RT2237A3.Models
 
 
 
-        public string NameFull { get; set; }
-        public string NameShort { get; set; }
+        //public string NameFull { get; set; }
+        //public string NameShort { get; set; }
     }
 
 

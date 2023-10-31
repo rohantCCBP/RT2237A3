@@ -147,6 +147,7 @@
     <Compile Include="Models\ArtistBaseViewModel.cs" />
     <Compile Include="Models\MediaTypeBaseViewModel.cs" />
     <Compile Include="Models\PlaylistBaseViewModel.cs" />
+    <Compile Include="Models\PkaylistWithTracksViewModel.cs" />
     <Compile Include="Models\PlaylistEditTracksFormViewModel.cs" />
     <Compile Include="Models\PlaylistEditTracksViewModel.cs" />
     <Compile Include="Models\TrackAddFormViewModel.cs" />

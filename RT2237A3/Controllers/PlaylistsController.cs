@@ -45,14 +45,21 @@ namespace RT2237A3.Controllers
             //    return NotFound();
             //}
 
-            var allTracks = m.GetAllTracks();
+            var allTracks = m.PlaylistGetAll();
             var selectedTrackIds = playlist.Tracks.Select(t => t.TrackId);
+
+
 
             var formModel = new PlaylistEditTracksFormViewModel
             {
                 Id = playlist.PlaylistId,
                 Name = playlist.Name,
-                TracksList = new MultiSelectList(allTracks, "Id", "NameFull", selectedTrackIds),
+                 Tracks = playlist.Tracks,
+
+//TracksList = new MultiSelectList(allTracks, "Id", "NameFull", selectedTrackIds),
+                //formModel.CurrentTracks = new MultiSelectList(allTracks, "Id", "NameFull", selectedTrackIds),
+
+
                 CurrentTracks = playlist.Tracks.Select(t => new TrackBaseViewModel
                 {
                     TrackId = t.TrackId,

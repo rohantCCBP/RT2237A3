@@ -6,21 +6,32 @@
 <h1>Playlist details - " + Model.Name</h1>
 <div class="row">
     <div class="col-md-6">
-        @*@foreach (var track in Model.TracksList)
+        @foreach (var track in Model.Tracks)
         {
-        <input type="checkbox" name="SelectedTracks" value="@track.Value"
-               @(Model.CurrentTracks.Any(t=> t.TrackId.ToString() == track.Value) ? "checked" : "") />
+        <input type="checkbox" name="SelectedTracks" value="@track.TrackId" />
 
-        @track.Text<br />
-        }*@
 
+        @*@(Model.CurrentTracks.Any(t=> t.TrackId.ToString() == track.TrackId) ? "checked" : "")*@
+
+
+        @*<input type="checkbox" name="SelectedTracks" value="@track.Value"
+                 @(Model.CurrentTracks.Any(t=> t.TrackId.ToString() == track.Value) ? "checked" : "") />*@
+
+        @track.Name<br />
+        }
 
     </div>
     <div class="col-md-6 card">
         <h4>Now on Playlist</h4>
         @foreach (var track in Model.CurrentTracks)
+
         {
-        <p>@track.NameShort</p>
+        <div>
+
+            @*<input type="checkbox" name="TrackIds" value="@track" />*@
+            @track.Name
+           @* <p>@track.NameShort</p>*@
+        </div>
         }
     </div>
 </div>
