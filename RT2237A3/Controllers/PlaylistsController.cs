@@ -40,14 +40,14 @@ namespace RT2237A3.Controllers
         public ActionResult Edit(int id)
         {
             var playlist = m.PlaylistGetById(id);
-            //if (playlist == null)
-            //{
-            //    return NotFound();
-            //}
+            if (playlist == null)
+            {
+                return HttpNotFound();
+            }
 
             var allTracks = m.PlaylistGetAll();
-            var selectedTrackIds = playlist.Tracks.Select(t => t.TrackId);
-
+            //var selectedTrackIds = playlist.Tracks.Select(t => t.TrackId);
+            var selectedTrackIds = playlist.Tracks.Select(t => t.TrackId).ToList();
 
 
             var formModel = new PlaylistEditTracksFormViewModel
@@ -56,10 +56,6 @@ namespace RT2237A3.Controllers
                 Name = playlist.Name,
                  Tracks = playlist.Tracks,
 
-//TracksList = new MultiSelectList(allTracks, "Id", "NameFull", selectedTrackIds),
-                //formModel.CurrentTracks = new MultiSelectList(allTracks, "Id", "NameFull", selectedTrackIds),
-
-
                 CurrentTracks = playlist.Tracks.Select(t => new TrackBaseViewModel
                 {
                     TrackId = t.TrackId,
@@ -67,23 +63,40 @@ namespace RT2237A3.Controllers
                     Composer = t.Composer,
                     Milliseconds = t.Milliseconds,
                     UnitPrice = t.UnitPrice
+                }),
+                TrackSelections = m.TrackGetAll().Select(t => new TrackCheckBoxListViewModel
+                {
+                    TrackId = t.TrackId,
+                      NameShort = t.Name,
+IsSelected = selectedTrackIds.Contains(t.TrackId)
                 })
             };
 
             return View(formModel);
         }
 
+        //[HttpPost]
+        //public ActionResult Edit(int id, PlaylistEditTracksViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        // Your logic to update the playlist with the selected tracks
+        //        m.UpdatePlaylistTracks(id, model.SelectedTracks);
+        //        return RedirectToAction("Details", new { id = id });
+        //    }
+        //    return View(model);
+        //}
         [HttpPost]
-        public ActionResult Edit(int id, PlaylistEditTracksViewModel model)
+        public ActionResult Edit(int id, PlaylistEditTracksFormViewModel model, int[] selectedTrackIds)
         {
             if (ModelState.IsValid)
             {
-                // Your logic to update the playlist with the selected tracks
-                m.UpdatePlaylistTracks(id, model.SelectedTracks);
+                m.UpdatePlaylistTracks(id, selectedTrackIds);
                 return RedirectToAction("Details", new { id = id });
             }
             return View(model);
         }
+
 
 
     }
