@@ -221,6 +221,7 @@
     <Content Include="Views\Tracks\Create.cshtml" />
     <Content Include="Views\Playlists\Index.cshtml" />
     <Content Include="Views\Playlists\Details.cshtml" />
+    <Content Include="Views\Playlists\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

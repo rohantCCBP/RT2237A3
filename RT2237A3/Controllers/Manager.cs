@@ -4,6 +4,8 @@ using RT2237A3.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
+using System.Data.Entity;
 
 // ************************************************************************************
 // WEB524 Project Template V1 == 2237-e943f9f1-bf57-40da-b2ba-8ebfe46db6bf
@@ -47,6 +49,11 @@ namespace RT2237A3.Controllers
                 //cfg.CreateMap<Playlist, PlaylistBaseViewModel>().ForMember(dest => dest.TracksCount, opt => opt.MapFrom(src => src.Tracks.Count));
                 cfg.CreateMap<Playlist, PlaylistBaseViewModel>()
    .ForMember(dest => dest.TrackNames, opt => opt.MapFrom(src => src.Tracks.Select(t => t.Name)));
+                
+                
+                
+                
+                cfg.CreateMap<TrackBaseViewModel, TrackCheckBoxListViewModel>();
 
 
 
@@ -132,6 +139,61 @@ namespace RT2237A3.Controllers
             return mapper.Map<IEnumerable<Playlist>, IEnumerable<PlaylistBaseViewModel>>(playlists);
         }
 
+        public PlaylistBaseViewModel PlaylistGetById(int id)
+        {
+            var playlist = ds.Playlists.Include("Tracks").SingleOrDefault(p => p.PlaylistId == id);
+
+            return playlist == null ? null : mapper.Map<Playlist, PlaylistBaseViewModel>(playlist);
+        }
+
+        public void UpdatePlaylistTracks(int playlistId, IEnumerable<int> selectedTrackIds)
+        {
+            var playlist = ds.Playlists.Include(p => p.Tracks).FirstOrDefault(p => p.PlaylistId == playlistId);
+
+            if (playlist != null)
+            {
+                // Remove existing tracks
+                playlist.Tracks.Clear();
+
+                // Add the selected tracks
+                foreach (var trackId in selectedTrackIds)
+                {
+                    var track = ds.Tracks.Find(trackId);
+                    if (track != null)
+                    {
+                        playlist.Tracks.Add(track);
+                    }
+                }
+
+                ds.SaveChanges();
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public List<TrackBaseViewModel> GetAllTracks()
+        {
+            return ds.Tracks.OrderBy(t => t.Name).Select(t => new TrackBaseViewModel
+            {
+                TrackId = t.TrackId,
+                // ... (map all other properties of TrackBaseViewModel from t)
+            }).ToList();
+        }
+
+
+
+
+
         //ORIGINAL
         //public PlaylistBaseViewModel GetPlaylistWithTracks(int id)
         //{
@@ -148,89 +210,85 @@ namespace RT2237A3.Controllers
         //    return result;
         //}
 
-        public PlaylistEditTracksViewModel GetPlaylistWithTracks(int id)
-        {
-            var playlist = ds.Playlists.Include("Tracks").SingleOrDefault(p => p.PlaylistId == id);
-            if (playlist == null) return null;
-
-            var result = new PlaylistEditTracksViewModel
-            {
-                Id = playlist.PlaylistId,
-                Name = playlist.Name,
-                TracksOnPlaylist = playlist.Tracks.Select(t => new TrackBaseViewModel
-                {
-                    // Map properties of t (which is a Track) to this ViewModel
-                    TrackId = t.TrackId,
-                    // ... (any other properties your TrackBaseViewModel might have, map them here)
-                }).ToList(),// Directly assign the tracks from the fetched playlist
-                //SelectedTracks = playlist.Tracks.Select(t => t.PlaylistId).ToList() // IDs of tracks
-                SelectedTracks = playlist.Tracks.Select(t => t.TrackId).ToList(),
-
-            };
-
-            return result;
-        }
-        public List<TrackBaseViewModel> GetAllTracks()
-        {
-            return ds.Tracks.OrderBy(t => t.Name).Select(t => new TrackBaseViewModel
-            {
-                TrackId = t.TrackId,
-                // ... (map all other properties of TrackBaseViewModel from t)
-            }).ToList();
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //public PlaylistBaseViewModel PlaylistGetById(int id)
-        //{
-        //    var playlist = ds.Playlists.SingleOrDefault(p => p.PlaylistId == id);
-        //    if (playlist == null) return null;
-
-        //    return mapper.Map<Playlist, PlaylistBaseViewModel>(playlist);
-        //}
-
-        //// This hypothetical method fetches tracks associated with a given playlist
-        //public IEnumerable<TrackCheckBoxListViewModel> GetTracksForPlaylist(int id)
+        //public PlaylistEditTracksViewModel GetPlaylistWithTracks(int id)
         //{
         //    var playlist = ds.Playlists.Include("Tracks").SingleOrDefault(p => p.PlaylistId == id);
         //    if (playlist == null) return null;
 
-        //    return mapper.Map<IEnumerable<Track>, IEnumerable<TrackCheckBoxListViewModel>>(playlist.Tracks);
+        //    var result = new PlaylistEditTracksViewModel
+        //    {
+        //        Id = playlist.PlaylistId,
+        //        Name = playlist.Name,
+        //        TracksOnPlaylist = playlist.Tracks.Select(t => new TrackBaseViewModel
+        //        {
+        //            // Map properties of t (which is a Track) to this ViewModel
+        //            TrackId = t.TrackId,
+        //            // ... (any other properties your TrackBaseViewModel might have, map them here)
+        //        }).ToList(),// Directly assign the tracks from the fetched playlist
+        //        //SelectedTracks = playlist.Tracks.Select(t => t.PlaylistId).ToList() // IDs of tracks
+        //        SelectedTracks = playlist.Tracks.Select(t => t.TrackId).ToList(),
+
+        //    };
+
+        //    return result;
         //}
 
-        //// Update the tracks of a specific playlist
-        //public bool PlaylistEditTracks(int playlistId, List<int> selectedTrackIds)
+
+
+
+
+        //// Returns all tracks
+        //public IEnumerable<TrackBaseViewModel> AllTracks()
         //{
-        //    var playlist = ds.Playlists.Include("Tracks").SingleOrDefault(p => p.PlaylistId == playlistId);
-        //    if (playlist == null) return false;
+        //    var tracks = ds.Tracks.ToList();
+        //    return mapper.Map<IEnumerable<Track>, IEnumerable<TrackBaseViewModel>>(tracks);
+        //}
 
-        //    // Clearing the current tracks from the playlist
+        //// Edit the playlist with new tracks
+        //public PlaylistEditTracksViewModel EditPlaylist(PlaylistEditTracksViewModel newItem)
+        //{
+        //    var playlist = ds.Playlists.Include("Tracks").SingleOrDefault(p => p.PlaylistId == newItem.Id);
+
+        //    if (playlist == null) return null;
+
+        //    // Update the playlist name
+        //    playlist.Name = newItem.Name;
+
+        //    // Remove all tracks from playlist and add the selected ones
         //    playlist.Tracks.Clear();
-
-        //    // Adding the selected tracks to the playlist
-        //    foreach (var trackId in selectedTrackIds)
+        //    foreach (var trackId in newItem.SelectedTracks)
         //    {
         //        var track = ds.Tracks.SingleOrDefault(t => t.TrackId == trackId);
-        //        if (track != null) playlist.Tracks.Add(track);
+        //        if (track != null)
+        //        {
+        //            playlist.Tracks.Add(track);
+        //        }
         //    }
 
-        //    // Saving the changes to the database
         //    ds.SaveChanges();
 
-        //    return true;
+        //    return GetPlaylistWithTracks(newItem.Id);  // return the updated playlist
         //}
+        //public IEnumerable<TrackBaseViewModel> CurrentPlaylistTracks(int playlistId)
+        //{
+        //    // Fetch the playlist with its tracks
+        //    var playlistWithTracks = GetPlaylistWithTracks(playlistId);
+
+        //    // Return the tracks associated with the playlist
+        //    return playlistWithTracks?.TracksOnPlaylist;
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
 
         internal bool MediaTypeExists(int mediaTypeId)
         {

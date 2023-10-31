@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
+
 
 namespace RT2237A3.Controllers
 {
@@ -18,47 +20,64 @@ namespace RT2237A3.Controllers
             return View(playlists);
         }
 
-        // GET: Playlists/Details/5
         public ActionResult Details(int? id)
         {
-            if (!id.HasValue) return HttpNotFound();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
-            var playlist = m.GetPlaylistWithTracks(id.Value);
-            if (playlist == null) return HttpNotFound();
+            var playlist = m.PlaylistGetById(id.Value);
+
+            if (playlist == null)
+            {
+                return HttpNotFound();
+            }
 
             return View(playlist);
         }
 
-
-
-        // GET: Playlists/EditTracks/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (!id.HasValue) return HttpNotFound();
+            var playlist = m.PlaylistGetById(id);
+            //if (playlist == null)
+            //{
+            //    return NotFound();
+            //}
 
-        
-            var viewModel = m.GetPlaylistWithTracks(id.Value);
+            var allTracks = m.GetAllTracks();
+            var selectedTrackIds = playlist.Tracks.Select(t => t.TrackId);
 
-            if (viewModel == null) return HttpNotFound();
+            var formModel = new PlaylistEditTracksFormViewModel
+            {
+                Id = playlist.PlaylistId,
+                Name = playlist.Name,
+                TracksList = new MultiSelectList(allTracks, "Id", "NameFull", selectedTrackIds),
+                CurrentTracks = playlist.Tracks.Select(t => new TrackBaseViewModel
+                {
+                    TrackId = t.TrackId,
+                    Name = t.Name,
+                    Composer = t.Composer,
+                    Milliseconds = t.Milliseconds,
+                    UnitPrice = t.UnitPrice
+                })
+            };
 
-            viewModel.AllTracks = m.GetAllTracks();
-
-            return View(viewModel);
+            return View(formModel);
         }
 
-
-
-        // POST: Playlists/EditTracks/5
         [HttpPost]
-        public ActionResult Edit(PlaylistEditTracksViewModel viewModel)
+        public ActionResult Edit(int id, PlaylistEditTracksViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Save changes, including updating tracks associated with the playlist
-
-                return RedirectToAction("Details", new { id = viewModel.Id });
+                // Your logic to update the playlist with the selected tracks
+                m.UpdatePlaylistTracks(id, model.SelectedTracks);
+                return RedirectToAction("Details", new { id = id });
             }
-            return View(viewModel);
+            return View(model);
         }
+
+
     }
 }

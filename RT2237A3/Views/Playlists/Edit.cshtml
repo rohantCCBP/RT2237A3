@@ -1,0 +1,30 @@
+﻿@model RT2237A3.Models.PlaylistEditTracksFormViewModel
+
+@{
+    ViewBag.Title = "Playlist details - " + Model.Name;
+}
+<h1>Playlist details - " + Model.Name</h1>
+<div class="row">
+    <div class="col-md-6">
+        @*@foreach (var track in Model.TracksList)
+        {
+        <input type="checkbox" name="SelectedTracks" value="@track.Value"
+               @(Model.CurrentTracks.Any(t=> t.TrackId.ToString() == track.Value) ? "checked" : "") />
+
+        @track.Text<br />
+        }*@
+
+
+    </div>
+    <div class="col-md-6 card">
+        <h4>Now on Playlist</h4>
+        @foreach (var track in Model.CurrentTracks)
+        {
+        <p>@track.NameShort</p>
+        }
+    </div>
+</div>
+<button type="submit">Save changes</button>
+@*@Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+ |
+@Html.ActionLink("Back to List", "Index")*@

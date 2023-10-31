@@ -34,5 +34,15 @@ namespace RT2237A3.Models
         [Display(Name = "Unit price")]
         [Column(TypeName = "numeric")]
         public decimal UnitPrice { get; set; }
+
+
+
+        public string NameFull { get; set; }
+        public string NameShort { get; set; }
     }
+
+
+
+
+
 }
