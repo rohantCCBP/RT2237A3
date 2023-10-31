@@ -1,0 +1,52 @@
+﻿@model RT2237A3.Models.TrackWithDetailViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TrackWithDetailViewModel</h4>
+    <hr />
+    <table>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.Name)</td>
+            <td>@Html.DisplayFor(model => model.Name)</td>
+        </tr>
+
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.Composer)</td>
+            <td>@Html.DisplayFor(model => model.Composer)</td>
+        </tr>
+
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.Milliseconds)</td>
+            <td>@Html.DisplayFor(model => model.Milliseconds)</td>
+        </tr>
+
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.UnitPrice)</td>
+            <td>@Html.DisplayFor(model => model.UnitPrice)</td>
+        </tr>
+
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.AlbumTitle)</td>
+            <td>@Html.DisplayFor(model => model.AlbumTitle)</td>
+        </tr>
+
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.AlbumArtistName)</td>
+            <td>@Html.DisplayFor(model => model.AlbumArtistName)</td>
+        </tr>
+
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.MediaType.Name)</td>
+            <td>@Html.DisplayFor(model => model.MediaType.Name)</td>
+        </tr>
+    </table>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TrackId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

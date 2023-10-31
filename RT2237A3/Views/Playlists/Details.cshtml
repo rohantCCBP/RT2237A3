@@ -1,0 +1,22 @@
+﻿@model RT2237A3.Models.PlaylistBaseViewModel
+
+@{
+    ViewBag.Title = "Playlist details - " + Model.Name;
+}
+
+<h2>Playlist details - <span class="bg-info">@Model.Name</span></h2>
+<hr />
+@Html.ActionLink("Edit", "Edit", new { id = Model.PlaylistId }) |
+@Html.ActionLink("Back to List", "Index")
+<hr />
+<h4>Playlist Name: <span class="bg-info">@Model.Name</span></h4>
+
+<h5>Tracks on the Playlist <span class="badge bg-primary">@Model.TracksCount</span></h5>
+<ul>
+    @foreach (var track in Model.TrackNames)
+    {
+    <li>@track</li>
+    }
+</ul>
+@Html.ActionLink("Edit", "Edit", new { id = Model.PlaylistId }) |
+@Html.ActionLink("Back to List", "Index")
