@@ -46,15 +46,9 @@ namespace RT2237A3.Controllers
      .ForMember(dest => dest.AlbumTitle, opt => opt.MapFrom(src => src.Album.Title));
                 cfg.CreateMap<TrackAddFormViewModel, Track>();
                 cfg.CreateMap<TrackAddViewModel, Track>();
-                //cfg.CreateMap<Playlist, PlaylistBaseViewModel>().ForMember(dest => dest.TracksCount, opt => opt.MapFrom(src => src.Tracks.Count));
                 cfg.CreateMap<Playlist, PlaylistBaseViewModel>()
    .ForMember(dest => dest.TrackNames, opt => opt.MapFrom(src => src.Tracks.Select(t => t.Name)));
-                
-                
-                
-                
                 cfg.CreateMap<TrackBaseViewModel, TrackCheckBoxListViewModel>();
-
                 cfg.CreateMap<PlaylistBaseViewModel, PlaylistEditTracksViewModel>();
 
             })
@@ -104,8 +98,7 @@ namespace RT2237A3.Controllers
 
         public TrackWithDetailViewModel TrackGetOne(int id)
         {
-            //var track = ds.Tracks.Include("MediaType").SingleOrDefault(t => t.TrackId == id);
-            var track = ds.Tracks.Include("MediaType").Include("Album.Artist").SingleOrDefault(t => t.TrackId == id);
+                        var track = ds.Tracks.Include("MediaType").Include("Album.Artist").SingleOrDefault(t => t.TrackId == id);
 
             if (track == null) return null;
 
@@ -116,15 +109,12 @@ namespace RT2237A3.Controllers
 
         public TrackBaseViewModel TrackAdd(TrackAddViewModel model)
         {
-            // Validation
             if (model.MediaTypeId <= 0 || !ds.MediaTypes.Any(m => m.MediaTypeId == model.MediaTypeId))
             {
-                // Handle error - MediaTypeId is not set or is invalid
                 return null;
             }
-            // Additional validations for other properties like AlbumId can be added here
 
-            Track newTrack = mapper.Map<Track>(model); // Assuming you have mapping set up
+            Track newTrack = mapper.Map<Track>(model); 
             ds.Tracks.Add(newTrack);
 
             ds.SaveChanges();
@@ -155,10 +145,8 @@ namespace RT2237A3.Controllers
 
             if (playlist != null)
             {
-                // Remove existing tracks
                 playlist.Tracks.Clear();
 
-                // Add the selected tracks
                 foreach (var trackId in selectedTrackIds)
                 {
                     var track = ds.Tracks.Find(trackId);
@@ -173,126 +161,13 @@ namespace RT2237A3.Controllers
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
         public List<TrackBaseViewModel> GetAllTracks()
         {
             return ds.Tracks.OrderBy(t => t.Name).Select(t => new TrackBaseViewModel
             {
                 TrackId = t.TrackId,
-                // ... (map all other properties of TrackBaseViewModel from t)
             }).ToList();
         }
-
-
-
-
-
-        //ORIGINAL
-        //public PlaylistBaseViewModel GetPlaylistWithTracks(int id)
-        //{
-        //    var playlist = ds.Playlists.Include("Tracks").SingleOrDefault(p => p.PlaylistId == id);
-        //    if (playlist == null) return null;
-
-        //    var result = new PlaylistBaseViewModel
-        //    {
-        //        PlaylistId = playlist.PlaylistId,
-        //        Name = playlist.Name,
-        //        TrackNames = playlist.Tracks.Select(t => t.Name).ToList()
-        //    };
-
-        //    return result;
-        //}
-
-        //public PlaylistEditTracksViewModel GetPlaylistWithTracks(int id)
-        //{
-        //    var playlist = ds.Playlists.Include("Tracks").SingleOrDefault(p => p.PlaylistId == id);
-        //    if (playlist == null) return null;
-
-        //    var result = new PlaylistEditTracksViewModel
-        //    {
-        //        Id = playlist.PlaylistId,
-        //        Name = playlist.Name,
-        //        TracksOnPlaylist = playlist.Tracks.Select(t => new TrackBaseViewModel
-        //        {
-        //            // Map properties of t (which is a Track) to this ViewModel
-        //            TrackId = t.TrackId,
-        //            // ... (any other properties your TrackBaseViewModel might have, map them here)
-        //        }).ToList(),// Directly assign the tracks from the fetched playlist
-        //        //SelectedTracks = playlist.Tracks.Select(t => t.PlaylistId).ToList() // IDs of tracks
-        //        SelectedTracks = playlist.Tracks.Select(t => t.TrackId).ToList(),
-
-        //    };
-
-        //    return result;
-        //}
-
-
-
-
-
-        //// Returns all tracks
-        //public IEnumerable<TrackBaseViewModel> AllTracks()
-        //{
-        //    var tracks = ds.Tracks.ToList();
-        //    return mapper.Map<IEnumerable<Track>, IEnumerable<TrackBaseViewModel>>(tracks);
-        //}
-
-        //// Edit the playlist with new tracks
-        //public PlaylistEditTracksViewModel EditPlaylist(PlaylistEditTracksViewModel newItem)
-        //{
-        //    var playlist = ds.Playlists.Include("Tracks").SingleOrDefault(p => p.PlaylistId == newItem.Id);
-
-        //    if (playlist == null) return null;
-
-        //    // Update the playlist name
-        //    playlist.Name = newItem.Name;
-
-        //    // Remove all tracks from playlist and add the selected ones
-        //    playlist.Tracks.Clear();
-        //    foreach (var trackId in newItem.SelectedTracks)
-        //    {
-        //        var track = ds.Tracks.SingleOrDefault(t => t.TrackId == trackId);
-        //        if (track != null)
-        //        {
-        //            playlist.Tracks.Add(track);
-        //        }
-        //    }
-
-        //    ds.SaveChanges();
-
-        //    return GetPlaylistWithTracks(newItem.Id);  // return the updated playlist
-        //}
-        //public IEnumerable<TrackBaseViewModel> CurrentPlaylistTracks(int playlistId)
-        //{
-        //    // Fetch the playlist with its tracks
-        //    var playlistWithTracks = GetPlaylistWithTracks(playlistId);
-
-        //    // Return the tracks associated with the playlist
-        //    return playlistWithTracks?.TracksOnPlaylist;
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
         internal bool MediaTypeExists(int mediaTypeId)
         {
             return ds.MediaTypes.Any(mt => mt.MediaTypeId == mediaTypeId);

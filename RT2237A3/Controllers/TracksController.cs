@@ -54,24 +54,20 @@ namespace RT2237A3.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Convert form model to the ViewModel
-                var convertedModel = ConvertToTrackAddViewModel(model);  // Using 'model' and renaming the result
+                var convertedModel = ConvertToTrackAddViewModel(model);  
 
-                // Validate the MediaTypeId
                 if (!m.MediaTypeExists(convertedModel.MediaTypeId))
                 {
                     ModelState.AddModelError("MediaTypeId", "Selected Media Type is invalid.");
                 }
                 else
                 {
-                    var newTrack = m.TrackAdd(convertedModel);  // Use 'convertedModel'
-
+                    var newTrack = m.TrackAdd(convertedModel);  
                     if (newTrack != null)
                         return RedirectToAction("Index");
                 }
             }
 
-            // If we reach here, something failed, redisplay form
             model.AlbumList = new SelectList(m.AlbumGetAll(), "AlbumId", "Title");
             model.MediaTypeList = new SelectList(m.MediaTypeGetAll(), "MediaTypeId", "Name");
 
@@ -87,8 +83,7 @@ namespace RT2237A3.Controllers
                 Composer = formModel.Composer,
                 Milliseconds = formModel.Milliseconds,
                 UnitPrice = formModel.UnitPrice,
-                MediaTypeId = int.Parse(formModel.MediaTypeList.SelectedValue.ToString()), // Assuming you're storing the MediaTypeId as the selected value
-                                                                                           // ... any other properties
+                MediaTypeId = int.Parse(formModel.MediaTypeList.SelectedValue.ToString()), 
             };
         }
 
@@ -104,7 +99,6 @@ namespace RT2237A3.Controllers
                     return RedirectToAction("Details", new { id = addedTrack.TrackId });
             }
 
-            // If we reach here, something failed, re-populate SelectList and redisplay form
             var form = new TrackAddFormViewModel
             {
                 Name = model.Name,

@@ -46,7 +46,6 @@ namespace RT2237A3.Controllers
             }
 
             var allTracks = m.PlaylistGetAll();
-            //var selectedTrackIds = playlist.Tracks.Select(t => t.TrackId);
             var selectedTrackIds = playlist.Tracks.Select(t => t.TrackId).ToList();
 
 
@@ -54,7 +53,7 @@ namespace RT2237A3.Controllers
             {
                 Id = playlist.PlaylistId,
                 Name = playlist.Name,
-                 Tracks = playlist.Tracks,
+                Tracks = playlist.Tracks,
 
                 CurrentTracks = playlist.Tracks.Select(t => new TrackBaseViewModel
                 {
@@ -67,25 +66,14 @@ namespace RT2237A3.Controllers
                 TrackSelections = m.TrackGetAll().Select(t => new TrackCheckBoxListViewModel
                 {
                     TrackId = t.TrackId,
-                      NameShort = t.Name,
-IsSelected = selectedTrackIds.Contains(t.TrackId)
+                    NameShort = t.Name,
+                    IsSelected = selectedTrackIds.Contains(t.TrackId)
                 })
             };
 
             return View(formModel);
         }
 
-        //[HttpPost]
-        //public ActionResult Edit(int id, PlaylistEditTracksViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // Your logic to update the playlist with the selected tracks
-        //        m.UpdatePlaylistTracks(id, model.SelectedTracks);
-        //        return RedirectToAction("Details", new { id = id });
-        //    }
-        //    return View(model);
-        //}
         [HttpPost]
         public ActionResult Edit(int id, PlaylistEditTracksFormViewModel model, int[] selectedTrackIds)
         {
@@ -96,8 +84,5 @@ IsSelected = selectedTrackIds.Contains(t.TrackId)
             }
             return View(model);
         }
-
-
-
     }
 }
