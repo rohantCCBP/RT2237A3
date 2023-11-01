@@ -45,16 +45,13 @@ namespace RT2237A3.Controllers
                 return HttpNotFound();
             }
 
-            var allTracks = m.PlaylistGetAll();
             var selectedTrackIds = playlist.Tracks.Select(t => t.TrackId).ToList();
-
 
             var formModel = new PlaylistEditTracksFormViewModel
             {
                 Id = playlist.PlaylistId,
                 Name = playlist.Name,
                 Tracks = playlist.Tracks,
-
                 CurrentTracks = playlist.Tracks.Select(t => new TrackBaseViewModel
                 {
                     TrackId = t.TrackId,
@@ -75,14 +72,19 @@ namespace RT2237A3.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, PlaylistEditTracksFormViewModel model, int[] selectedTrackIds)
+        public ActionResult Edit(PlaylistEditTracksViewModel model)
         {
+            if (model.SelectedTrackIds == null)
+            {
+                model.SelectedTrackIds = new int[0];
+            }
             if (ModelState.IsValid)
             {
-                m.UpdatePlaylistTracks(id, selectedTrackIds);
-                return RedirectToAction("Details", new { id = id });
+                m.UpdatePlaylistTracks(model.Id, model.SelectedTrackIds);
+                return RedirectToAction("Details", new { id = model.Id });
             }
-            return View(model);
+            return View(); 
         }
+
     }
 }

@@ -139,6 +139,34 @@ namespace RT2237A3.Controllers
             return playlist == null ? null : mapper.Map<Playlist, PlaylistBaseViewModel>(playlist);
         }
 
+        //public void UpdatePlaylistTracks(int playlistId, IEnumerable<int> selectedTrackIds)
+        //{
+        //    var playlist = ds.Playlists.Include(p => p.Tracks).FirstOrDefault(p => p.PlaylistId == playlistId);
+
+        //    if (playlist != null)
+        //    {
+        //        playlist.Tracks.Clear();
+
+        //        if (selectedTrackIds != null)
+        //        {
+
+        //            foreach (var trackId in selectedTrackIds)
+        //            {
+        //                var track = ds.Tracks.Find(trackId);
+        //                if (track != null)
+        //                {
+        //                    playlist.Tracks.Add(track);
+        //                }
+        //            }
+        //        }
+
+        //        ds.Entry(playlist).State = EntityState.Modified;
+
+
+        //        ds.SaveChanges();
+        //    }
+        //}
+
         public void UpdatePlaylistTracks(int playlistId, IEnumerable<int> selectedTrackIds)
         {
             var playlist = ds.Playlists.Include(p => p.Tracks).FirstOrDefault(p => p.PlaylistId == playlistId);
@@ -147,18 +175,22 @@ namespace RT2237A3.Controllers
             {
                 playlist.Tracks.Clear();
 
-                foreach (var trackId in selectedTrackIds)
+                if (selectedTrackIds != null)
                 {
-                    var track = ds.Tracks.Find(trackId);
-                    if (track != null)
+                    foreach (var trackId in selectedTrackIds)
                     {
-                        playlist.Tracks.Add(track);
+                        var track = ds.Tracks.Find(trackId);
+                        if (track != null)
+                        {
+                            playlist.Tracks.Add(track);
+                        }
                     }
                 }
 
                 ds.SaveChanges();
             }
         }
+
 
 
         public List<TrackBaseViewModel> GetAllTracks()
