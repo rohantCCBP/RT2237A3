@@ -6,13 +6,11 @@ using System.Web.Mvc;
 
 namespace RT2237A3.Models
 {
-      public class PlaylistEditTracksFormViewModel : PlaylistBaseViewModel 
+    public class PlaylistEditTracksFormViewModel : PlaylistBaseViewModel
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public IEnumerable<TrackBaseViewModel> CurrentTracks { get; set; }
-        public IEnumerable<TrackCheckBoxListViewModel> TrackSelections { get; set; }
-       // public MultiSelectList TrackSelectionsList { get; set; }
-
+        //public MultiSelectList TrackSelectionsList { get; set; }
 
     }
 }

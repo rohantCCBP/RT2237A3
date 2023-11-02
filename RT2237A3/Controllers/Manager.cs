@@ -48,7 +48,6 @@ namespace RT2237A3.Controllers
                 cfg.CreateMap<TrackAddViewModel, Track>();
                 cfg.CreateMap<Playlist, PlaylistBaseViewModel>()
    .ForMember(dest => dest.TrackNames, opt => opt.MapFrom(src => src.Tracks.Select(t => t.Name)));
-                cfg.CreateMap<TrackBaseViewModel, TrackCheckBoxListViewModel>();
                 cfg.CreateMap<PlaylistBaseViewModel, PlaylistEditTracksViewModel>();
 
             })

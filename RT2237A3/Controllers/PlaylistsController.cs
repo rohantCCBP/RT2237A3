@@ -47,6 +47,9 @@ namespace RT2237A3.Controllers
 
             var selectedTrackIds = playlist.Tracks.Select(t => t.TrackId).ToList();
 
+            var allTracks = m.TrackGetAll();
+            var trackSelectionsList = new MultiSelectList(allTracks, "TrackId", "NameFull", selectedTrackIds);
+
             var formModel = new PlaylistEditTracksFormViewModel
             {
                 Id = playlist.PlaylistId,
@@ -60,12 +63,7 @@ namespace RT2237A3.Controllers
                     Milliseconds = t.Milliseconds,
                     UnitPrice = t.UnitPrice
                 }),
-                TrackSelections = m.TrackGetAll().Select(t => new TrackCheckBoxListViewModel
-                {
-                    TrackId = t.TrackId,
-                    Name = t.NameFull,
-                    IsSelected = selectedTrackIds.Contains(t.TrackId)
-                })
+                TrackSelectionsList = trackSelectionsList
             };
 
             return View(formModel);
@@ -78,13 +76,19 @@ namespace RT2237A3.Controllers
             {
                 model.SelectedTrackIds = new int[0];
             }
+
             if (ModelState.IsValid)
             {
                 m.UpdatePlaylistTracks(model.Id, model.SelectedTrackIds);
                 return RedirectToAction("Details", new { id = model.Id });
             }
-            return View();
+
+            var allTracks = m.TrackGetAll();
+            model.TrackSelectionsList = new MultiSelectList(allTracks, "Id", "NameFull", model.SelectedTrackIds);
+            return View(model);
         }
+
+
 
     }
 }

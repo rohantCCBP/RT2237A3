@@ -153,7 +153,6 @@
     <Compile Include="Models\TrackAddFormViewModel.cs" />
     <Compile Include="Models\TrackAddViewModel.cs" />
     <Compile Include="Models\TrackBaseViewModel.cs" />
-    <Compile Include="Models\TrackCheckBoxListViewModel.cs" />
     <Compile Include="Models\TrackWithDetailViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
