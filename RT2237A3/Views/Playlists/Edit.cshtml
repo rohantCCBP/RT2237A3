@@ -3,43 +3,48 @@
 @{
     ViewBag.Title = "Playlist details - " + Model.Name;
 }
-<h1>Playlist details - " + Model.Name</h1>
+
+<h1>Playlist details - @Model.Name</h1>
+
+@using (Html.BeginForm("Edit", "Playlists", FormMethod.Post))
+{
+<div>
+    @Html.ActionLink("Back to List", "Index")
+    <input type="submit" value="Save changes" style="margin-left: 10px;" />
+</div>
+
 <div class="row">
     <div class="col-md-6">
-
-
         <table>
-            @foreach (var track in Model.TrackSelections)
+            @for (int i = 0; i < Model.TrackSelections.Count(); i++)
             {
             <tr>
                 <td>
-                    @*<input type="checkbox" name="selectedTrackIds" value="@track.TrackId" @(track.IsSelected ? "checked" : "" ) />*@
-                    <input type="checkbox" name="SelectedTrackIds" value="@track.TrackId" @(track.IsSelected ? "checked" : "" ) />
+                    <input type="checkbox" name="SelectedTrackIds[@i]" value="@Model.TrackSelections.ElementAt(i).TrackId" @(Model.TrackSelections.ElementAt(i).IsSelected ? "checked" : "" ) />
                 </td>
                 <td>
-                    @track.NameShort
+                    @Model.TrackSelections.ElementAt(i).NameShort
                 </td>
             </tr>
             }
         </table>
-
     </div>
     <div class="col-md-6 card">
         <h4>Now on Playlist</h4>
         @foreach (var track in Model.CurrentTracks)
-
         {
         <div>
-
-            @*<input type="checkbox" name="TrackIds" value="@track" />*@
             @track.Name
-            @* <p>@track.NameShort</p>*@
         </div>
         }
     </div>
-</div>@using (Html.BeginForm("Edit", "Playlists", FormMethod.Post))
-{
-<button type="submit">Save changes</button>}
-@*@Html.ActionLink("Edit", "Edit", new { id = Model.Id })
- |
-@Html.ActionLink("Back to List", "Index")*@
+</div>
+
+<div>
+    <input type="submit" value="Save changes" />
+</div>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+}

@@ -9,7 +9,16 @@ namespace RT2237A3.Models
     public class PlaylistEditTracksViewModel
     {
         public int Id { get; set; }
-        public int[] SelectedTrackIds { get; set; }
+        //public int[] SelectedTrackIds { get; set; }
+        public IEnumerable<int> SelectedTrackIds { get; set; }
+
+
+        public PlaylistEditTracksViewModel()
+        {
+            SelectedTrackIds = new List<int>();
+
+        }
+
     }
 
 

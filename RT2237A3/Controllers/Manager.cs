@@ -169,15 +169,16 @@ namespace RT2237A3.Controllers
 
         public void UpdatePlaylistTracks(int playlistId, IEnumerable<int> selectedTrackIds)
         {
-            var playlist = ds.Playlists.Include(p => p.Tracks).FirstOrDefault(p => p.PlaylistId == playlistId);
+            //var playlist = ds.Playlists.Include(p => p.Tracks).FirstOrDefault(p => p.PlaylistId == playlistId);
+            var playlist = ds.Playlists.Include(p => p.Tracks).SingleOrDefault(p => p.PlaylistId == playlistId);
 
             if (playlist != null)
             {
                 playlist.Tracks.Clear();
 
-                if (selectedTrackIds != null)
+                if (selectedTrackIds != null) //or here
                 {
-                    foreach (var trackId in selectedTrackIds)
+                    foreach (var trackId in selectedTrackIds) //issue is here
                     {
                         var track = ds.Tracks.Find(trackId);
                         if (track != null)
@@ -189,6 +190,8 @@ namespace RT2237A3.Controllers
 
                 ds.SaveChanges();
             }
+
+        //    return mapper.Map<Playlist, PlaylistBaseViewModel>(playlist);
         }
 
 
