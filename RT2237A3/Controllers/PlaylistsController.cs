@@ -16,7 +16,7 @@ namespace RT2237A3.Controllers
         // GET: Playlists
         public ActionResult Index()
         {
-            var playlists = m.PlaylistGetAll(); // Fetch all playlists sorted by name
+            var playlists = m.PlaylistGetAll();
             return View(playlists);
         }
 
@@ -83,7 +83,7 @@ namespace RT2237A3.Controllers
                 m.UpdatePlaylistTracks(model.Id, model.SelectedTrackIds);
                 return RedirectToAction("Details", new { id = model.Id });
             }
-            return View(); 
+            return View();
         }
 
     }

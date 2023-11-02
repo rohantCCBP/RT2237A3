@@ -80,25 +80,25 @@ namespace RT2237A3.Controllers
 
         public IEnumerable<ArtistBaseViewModel> ArtistGetAll()
         {
-            var artists = ds.Artists.OrderBy(a=> a.Name).ToList();
+            var artists = ds.Artists.OrderBy(a => a.Name).ToList();
             return mapper.Map<IEnumerable<Artist>, IEnumerable<ArtistBaseViewModel>>(artists);
         }
 
         public IEnumerable<MediaTypeBaseViewModel> MediaTypeGetAll()
         {
-            var mediaTypes = ds.MediaTypes.OrderBy(m=>m.Name).ToList();
+            var mediaTypes = ds.MediaTypes.OrderBy(m => m.Name).ToList();
             return mapper.Map<IEnumerable<MediaType>, IEnumerable<MediaTypeBaseViewModel>>(mediaTypes);
         }
 
         public IEnumerable<TrackWithDetailViewModel> TrackGetAll()
         {
-            var tracks = ds.Tracks.Include("Album.Artist").Include("MediaType").OrderBy(t=> t.Name).ToList();
+            var tracks = ds.Tracks.Include("Album.Artist").Include("MediaType").OrderBy(t => t.Name).ToList();
             return mapper.Map<IEnumerable<Track>, IEnumerable<TrackWithDetailViewModel>>(tracks);
         }
 
         public TrackWithDetailViewModel TrackGetOne(int id)
         {
-                        var track = ds.Tracks.Include("MediaType").Include("Album.Artist").SingleOrDefault(t => t.TrackId == id);
+            var track = ds.Tracks.Include("MediaType").Include("Album.Artist").SingleOrDefault(t => t.TrackId == id);
 
             if (track == null) return null;
 
@@ -114,7 +114,7 @@ namespace RT2237A3.Controllers
                 return null;
             }
 
-            Track newTrack = mapper.Map<Track>(model); 
+            Track newTrack = mapper.Map<Track>(model);
             ds.Tracks.Add(newTrack);
 
             ds.SaveChanges();
@@ -133,11 +133,12 @@ namespace RT2237A3.Controllers
         {
             var playlist = ds.Playlists
                 .Include(a => a.Tracks)
-          
+
                 .SingleOrDefault(p => p.PlaylistId == id);
 
             return playlist == null ? null : mapper.Map<Playlist, PlaylistBaseViewModel>(playlist);
         }
+
         public void UpdatePlaylistTracks(int playlistId, IEnumerable<int> selectedTrackIds)
         {
             var playlist = ds.Playlists.Include(p => p.Tracks).SingleOrDefault(p => p.PlaylistId == playlistId);
@@ -146,7 +147,7 @@ namespace RT2237A3.Controllers
             {
                 playlist.Tracks.Clear();
 
-                if (selectedTrackIds != null) 
+                if (selectedTrackIds != null)
                 {
                     foreach (var trackId in selectedTrackIds)
                     {
@@ -162,8 +163,6 @@ namespace RT2237A3.Controllers
             }
         }
 
-
-
         public List<TrackBaseViewModel> GetAllTracks()
         {
             return ds.Tracks.OrderBy(t => t.Name).Select(t => new TrackBaseViewModel
@@ -171,6 +170,7 @@ namespace RT2237A3.Controllers
                 TrackId = t.TrackId,
             }).ToList();
         }
+
         internal bool MediaTypeExists(int mediaTypeId)
         {
             return ds.MediaTypes.Any(mt => mt.MediaTypeId == mediaTypeId);

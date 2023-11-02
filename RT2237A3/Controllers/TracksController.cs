@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace RT2237A3.Controllers
 {
-      public class TracksController : Controller
+    public class TracksController : Controller
     {
         Manager m = new Manager();
         // GET: Tracks
@@ -49,66 +49,24 @@ namespace RT2237A3.Controllers
 
 
         [HttpPost]
-        [ActionName("CreateForm")]
-        public ActionResult Create(TrackAddFormViewModel model)
+        public ActionResult Create(TrackAddViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var convertedModel = ConvertToTrackAddViewModel(model);  
 
-                if (!m.MediaTypeExists(convertedModel.MediaTypeId))
+                if (!m.MediaTypeExists(model.MediaTypeId))
                 {
                     ModelState.AddModelError("MediaTypeId", "Selected Media Type is invalid.");
                 }
                 else
                 {
-                    var newTrack = m.TrackAdd(convertedModel);  
+                    var newTrack = m.TrackAdd(model);
                     if (newTrack != null)
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Details", new { id = newTrack.TrackId });
                 }
             }
 
-            model.AlbumList = new SelectList(m.AlbumGetAll(), "AlbumId", "Title");
-            model.MediaTypeList = new SelectList(m.MediaTypeGetAll(), "MediaTypeId", "Name");
-
             return View(model);
-        }
-
-
-        private TrackAddViewModel ConvertToTrackAddViewModel(TrackAddFormViewModel formModel)
-        {
-            return new TrackAddViewModel
-            {
-                Name = formModel.Name,
-                Composer = formModel.Composer,
-                Milliseconds = formModel.Milliseconds,
-                UnitPrice = formModel.UnitPrice,
-                MediaTypeId = int.Parse(formModel.MediaTypeList.SelectedValue.ToString()), 
-            };
-        }
-
-
-        [HttpPost]
-        public ActionResult Create(TrackAddViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var addedTrack = m.TrackAdd(model);
-
-                if (addedTrack != null)
-                    return RedirectToAction("Details", new { id = addedTrack.TrackId });
-            }
-
-            var form = new TrackAddFormViewModel
-            {
-                Name = model.Name,
-                Composer = model.Composer,
-                Milliseconds = model.Milliseconds,
-                UnitPrice = model.UnitPrice,
-                AlbumList = new SelectList(m.AlbumGetAll(), "AlbumId", "Title"),
-                MediaTypeList = new SelectList(m.MediaTypeGetAll(), "MediaTypeId", "Name")
-            };
-            return View(form);
         }
     }
 }

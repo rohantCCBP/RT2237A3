@@ -11,6 +11,8 @@ namespace RT2237A3.Models
         public int Id { get; set; } 
         public IEnumerable<TrackBaseViewModel> CurrentTracks { get; set; }
         public IEnumerable<TrackCheckBoxListViewModel> TrackSelections { get; set; }
-    
+       // public MultiSelectList TrackSelectionsList { get; set; }
+
+
     }
 }
