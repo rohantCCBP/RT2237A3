@@ -138,47 +138,17 @@ namespace RT2237A3.Controllers
 
             return playlist == null ? null : mapper.Map<Playlist, PlaylistBaseViewModel>(playlist);
         }
-
-        //public void UpdatePlaylistTracks(int playlistId, IEnumerable<int> selectedTrackIds)
-        //{
-        //    var playlist = ds.Playlists.Include(p => p.Tracks).FirstOrDefault(p => p.PlaylistId == playlistId);
-
-        //    if (playlist != null)
-        //    {
-        //        playlist.Tracks.Clear();
-
-        //        if (selectedTrackIds != null)
-        //        {
-
-        //            foreach (var trackId in selectedTrackIds)
-        //            {
-        //                var track = ds.Tracks.Find(trackId);
-        //                if (track != null)
-        //                {
-        //                    playlist.Tracks.Add(track);
-        //                }
-        //            }
-        //        }
-
-        //        ds.Entry(playlist).State = EntityState.Modified;
-
-
-        //        ds.SaveChanges();
-        //    }
-        //}
-
         public void UpdatePlaylistTracks(int playlistId, IEnumerable<int> selectedTrackIds)
         {
-            //var playlist = ds.Playlists.Include(p => p.Tracks).FirstOrDefault(p => p.PlaylistId == playlistId);
             var playlist = ds.Playlists.Include(p => p.Tracks).SingleOrDefault(p => p.PlaylistId == playlistId);
 
             if (playlist != null)
             {
                 playlist.Tracks.Clear();
 
-                if (selectedTrackIds != null) //or here
+                if (selectedTrackIds != null) 
                 {
-                    foreach (var trackId in selectedTrackIds) //issue is here
+                    foreach (var trackId in selectedTrackIds)
                     {
                         var track = ds.Tracks.Find(trackId);
                         if (track != null)
@@ -190,8 +160,6 @@ namespace RT2237A3.Controllers
 
                 ds.SaveChanges();
             }
-
-        //    return mapper.Map<Playlist, PlaylistBaseViewModel>(playlist);
         }
 
 

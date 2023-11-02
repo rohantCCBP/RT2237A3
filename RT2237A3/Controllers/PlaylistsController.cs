@@ -55,7 +55,7 @@ namespace RT2237A3.Controllers
                 CurrentTracks = playlist.Tracks.Select(t => new TrackBaseViewModel
                 {
                     TrackId = t.TrackId,
-                    Name = t.Name,
+                    Name = t.NameShort,
                     Composer = t.Composer,
                     Milliseconds = t.Milliseconds,
                     UnitPrice = t.UnitPrice
@@ -63,7 +63,7 @@ namespace RT2237A3.Controllers
                 TrackSelections = m.TrackGetAll().Select(t => new TrackCheckBoxListViewModel
                 {
                     TrackId = t.TrackId,
-                    NameShort = t.Name,
+                    Name = t.NameFull,
                     IsSelected = selectedTrackIds.Contains(t.TrackId)
                 })
             };

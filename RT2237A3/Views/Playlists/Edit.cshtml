@@ -23,7 +23,7 @@
                     <input type="checkbox" name="SelectedTrackIds[@i]" value="@Model.TrackSelections.ElementAt(i).TrackId" @(Model.TrackSelections.ElementAt(i).IsSelected ? "checked" : "" ) />
                 </td>
                 <td>
-                    @Model.TrackSelections.ElementAt(i).NameShort
+                    @Model.TrackSelections.ElementAt(i).Name
                 </td>
             </tr>
             }
