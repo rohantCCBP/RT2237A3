@@ -10,7 +10,6 @@ namespace RT2237A3.Models
     {
         public int Id { get; set; }
         public IEnumerable<int> SelectedTrackIds { get; set; }
-        public MultiSelectList TrackSelectionsList { get; set; }
 
         public PlaylistEditTracksViewModel()
         {

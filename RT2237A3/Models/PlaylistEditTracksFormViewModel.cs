@@ -10,7 +10,6 @@ namespace RT2237A3.Models
     {
         public int Id { get; set; }
         public IEnumerable<TrackBaseViewModel> CurrentTracks { get; set; }
-        //public MultiSelectList TrackSelectionsList { get; set; }
-
+        public MultiSelectList TrackSelectionsList { get; internal set; }
     }
 }

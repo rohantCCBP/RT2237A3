@@ -83,8 +83,6 @@ namespace RT2237A3.Controllers
                 return RedirectToAction("Details", new { id = model.Id });
             }
 
-            var allTracks = m.TrackGetAll();
-            model.TrackSelectionsList = new MultiSelectList(allTracks, "Id", "NameFull", model.SelectedTrackIds);
             return View(model);
         }
 
