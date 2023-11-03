@@ -1,4 +1,5 @@
-﻿using RT2237A3.Models;
+﻿using RT2237A3.Data;
+using RT2237A3.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,9 +39,11 @@ namespace RT2237A3.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            var allAlbums = m.AlbumGetAll();
+
             var form = new TrackAddFormViewModel
             {
-                AlbumList = new SelectList(m.AlbumGetAll(), "AlbumId", "Title"),
+                AlbumList = new SelectList(allAlbums, "AlbumId", "Title", allAlbums.FirstOrDefault()?.AlbumId),
                 MediaTypeList = new SelectList(m.MediaTypeGetAll(), "MediaTypeId", "Name")
             };
 

@@ -40,16 +40,12 @@ namespace RT2237A3.Controllers
                 cfg.CreateMap<Artist, ArtistBaseViewModel>();
                 cfg.CreateMap<MediaType, MediaTypeBaseViewModel>();
                 cfg.CreateMap<Track, TrackBaseViewModel>();
-                cfg.CreateMap<Track, TrackWithDetailViewModel>()
-     .ForMember(dest => dest.MediaType, opt => opt.MapFrom(src => src.MediaType))
-     .ForMember(dest => dest.AlbumArtistName, opt => opt.MapFrom(src => src.Album.Artist.Name))
-     .ForMember(dest => dest.AlbumTitle, opt => opt.MapFrom(src => src.Album.Title));
+                cfg.CreateMap<Track, TrackWithDetailViewModel>();
                 cfg.CreateMap<TrackAddFormViewModel, Track>();
                 cfg.CreateMap<TrackAddViewModel, Track>();
-                cfg.CreateMap<Playlist, PlaylistBaseViewModel>()
-   .ForMember(dest => dest.TrackNames, opt => opt.MapFrom(src => src.Tracks.Select(t => t.Name)));
+                cfg.CreateMap<Playlist, PlaylistBaseViewModel>();
+                // .ForMember(dest => dest.TrackNames, opt => opt.MapFrom(src => src.Tracks.Select(t => t.Name)));
                 cfg.CreateMap<PlaylistBaseViewModel, PlaylistEditTracksViewModel>();
-
             })
             {
             };
@@ -91,7 +87,7 @@ namespace RT2237A3.Controllers
 
         public IEnumerable<TrackWithDetailViewModel> TrackGetAll()
         {
-            var tracks = ds.Tracks.Include("Album.Artist").Include("MediaType").OrderBy(t => t.Name).ToList();
+            var tracks = ds.Tracks.Include("Album").Include("Album.Artist").Include("MediaType").OrderBy(t => t.Name).ToList();
             return mapper.Map<IEnumerable<Track>, IEnumerable<TrackWithDetailViewModel>>(tracks);
         }
 
@@ -164,7 +160,7 @@ namespace RT2237A3.Controllers
 
         public List<TrackBaseViewModel> GetAllTracks()
         {
-            return ds.Tracks.OrderBy(t => t.Name).Select(t => new TrackBaseViewModel
+            return ds.Tracks.Include("Tracks").OrderBy(t => t.Name).Select(t => new TrackBaseViewModel
             {
                 TrackId = t.TrackId,
             }).ToList();
