@@ -25,6 +25,5 @@ namespace RT2237A3.Models
         public SelectList MediaTypeList { get; set; }
 
         public int MediaTypeId { get; set; }
-
     }
 }

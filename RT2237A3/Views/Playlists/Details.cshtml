@@ -13,9 +13,9 @@
 
 <h5>Tracks on the Playlist <span class="badge bg-primary">@Model.TracksCount</span></h5>
 <ul>
-    @foreach (var track in Model.TrackNames)
+    @foreach (var track in Model.Tracks)
     {
-    <li>@track</li>
+    <li>@track.Name</li>
     }
 </ul>
 @Html.ActionLink("Edit", "Edit", new { id = Model.PlaylistId }) |

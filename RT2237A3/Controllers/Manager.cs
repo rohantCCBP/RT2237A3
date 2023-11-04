@@ -44,7 +44,6 @@ namespace RT2237A3.Controllers
                 cfg.CreateMap<TrackAddFormViewModel, Track>();
                 cfg.CreateMap<TrackAddViewModel, Track>();
                 cfg.CreateMap<Playlist, PlaylistBaseViewModel>();
-                // .ForMember(dest => dest.TrackNames, opt => opt.MapFrom(src => src.Tracks.Select(t => t.Name)));
                 cfg.CreateMap<PlaylistBaseViewModel, PlaylistEditTracksViewModel>();
             })
             {
@@ -87,19 +86,25 @@ namespace RT2237A3.Controllers
 
         public IEnumerable<TrackWithDetailViewModel> TrackGetAll()
         {
-            var tracks = ds.Tracks.Include("Album").Include("Album.Artist").Include("MediaType").OrderBy(t => t.Name).ToList();
-            return mapper.Map<IEnumerable<Track>, IEnumerable<TrackWithDetailViewModel>>(tracks);
+            var tracks = ds.Tracks
+                           .Include("Album.Artist")
+                           .Include("MediaType")
+                           .OrderBy(t => t.Name)
+                           .ToList();
+
+            return mapper.Map<IEnumerable<TrackWithDetailViewModel>>(tracks);
         }
 
         public TrackWithDetailViewModel TrackGetOne(int id)
         {
-            var track = ds.Tracks.Include("MediaType").Include("Album.Artist").SingleOrDefault(t => t.TrackId == id);
+            var track = ds.Tracks
+                           .Include("Album.Artist")
+                           .Include("MediaType")
+                           .SingleOrDefault(t => t.TrackId == id);
 
             if (track == null) return null;
 
-            var result = mapper.Map<TrackWithDetailViewModel>(track);
-
-            return result;
+            return mapper.Map<TrackWithDetailViewModel>(track);
         }
 
         public TrackBaseViewModel TrackAdd(TrackAddViewModel model)
@@ -156,14 +161,6 @@ namespace RT2237A3.Controllers
 
                 ds.SaveChanges();
             }
-        }
-
-        public List<TrackBaseViewModel> GetAllTracks()
-        {
-            return ds.Tracks.Include("Tracks").OrderBy(t => t.Name).Select(t => new TrackBaseViewModel
-            {
-                TrackId = t.TrackId,
-            }).ToList();
         }
 
         internal bool MediaTypeExists(int mediaTypeId)

@@ -9,8 +9,9 @@
 @using (Html.BeginForm("Edit", "Playlists", FormMethod.Post))
 {
 <div>
-    @Html.ActionLink("Back to List", "Index")
     <input type="submit" value="Save changes" style="margin-left: 10px;" />
+    |    @Html.ActionLink("Back to List", "Index") |
+    @Html.ActionLink("Back to Details", "Details", new { id = Model.Id })
 </div>
 
 <div class="row">
@@ -39,10 +40,8 @@
 </div>
 
 <div>
-    <input type="submit" value="Save changes" />
-</div>
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
+    <input type="submit" value="Save changes" style="margin-left: 10px;" />
+    |    @Html.ActionLink("Back to List", "Index") |
+    @Html.ActionLink("Back to Details", "Details", new { id = Model.Id })
 </div>
 }

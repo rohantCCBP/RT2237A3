@@ -15,10 +15,8 @@ namespace RT2237A3.Models
         [Display(Name = "Playlist Name")]
         public string Name { get; set; }
 
-        public IEnumerable<string> TrackNames { get; set; }
-
         [Display(Name = "Playlist Track Count")]
-        public int TracksCount => TrackNames?.Count() ?? 0;
+        public int TracksCount => Tracks?.Count() ?? 0;
 
         public double Milliseconds { get; set; }
         public string Composer { get; set; }

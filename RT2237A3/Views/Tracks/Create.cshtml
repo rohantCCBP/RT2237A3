@@ -7,14 +7,14 @@
 <h2>Add new track</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
 <script>
-        window.onload = function() {
-            document.getElementById("Name").focus();
-        };
+    window.onload = function () {
+        document.getElementById("Name").focus();
+    };
 </script>
 
 <div class="form-horizontal">
